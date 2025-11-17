@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  phive-service:
+    build: .
+    container_name: phive-grpc-service
+    ports:
+      - "9090:9090"
+    restart: unless-stopped

@@ -1,0 +1,115 @@
+syntax = "proto3";
+
+package invopop.phive.v1;
+
+option java_package = "com.invopop.phive.rpc";
+option java_outer_classname = "ValidationProto";
+
+// Service definition for phive validation operations
+service ValidationService {
+  // Lists all available VESIDs (Validation Execution Set IDs)
+  rpc ListVesIds(ListVesIdsRequest) returns (ListVesIdsResponse);
+
+  // Validates an XML document against a specific VESID
+  rpc ValidateXml(ValidateXmlRequest) returns (ValidateXmlResponse);
+}
+
+// Request to list all available VESIDs
+message ListVesIdsRequest {
+  // Optional filter to match VESIDs by pattern (e.g., "com.helger.*")
+  string filter = 1;
+}
+
+// Response containing list of available VESIDs
+message ListVesIdsResponse {
+  // List of available VESID strings
+  repeated VesIdInfo vesids = 1;
+
+  // Error message if the listing failed
+  string error_message = 2;
+}
+
+// Information about a VESID
+message VesIdInfo {
+  // The VESID in coordinate format (e.g., "com.helger.phive:test_xsd:1.0")
+  string vesid = 1;
+
+  // Human-readable name/description if available
+  string name = 2;
+
+  // Version of the validation set
+  string version = 3;
+
+  // Status (e.g., "VALID", "DEPRECATED", etc.)
+  string status = 4;
+}
+
+// Request to validate an XML document
+message ValidateXmlRequest {
+  // The VESID to use for validation (e.g., "com.helger.phive:test_xsd:1.0")
+  // Can use pseudo-versions like "latest" or "latest-release"
+  string vesid = 1;
+
+  // XML content as bytes
+  bytes xml_content = 2;
+
+  // Optional: source identifier for logging/tracking
+  string source_identifier = 3;
+}
+
+// Response from XML validation
+message ValidateXmlResponse {
+  // Overall validation success
+  bool success = 1;
+
+  // The resolved VESID that was used (if pseudo-version was used)
+  string resolved_vesid = 2;
+
+  // Validation results for each validation layer
+  repeated ValidationLayerResult results = 3;
+
+  // Error message if validation failed to execute
+  string error_message = 4;
+
+  // Timestamp when validation was performed (ISO 8601 format)
+  string timestamp = 5;
+}
+
+// Result from a single validation layer (e.g., XSD, Schematron)
+message ValidationLayerResult {
+  // The type of validation (e.g., "XSD", "Schematron", "EDIFACT")
+  string validation_type = 1;
+
+  // Artifact ID used for this validation
+  string artifact_id = 2;
+
+  // Success indicator for this layer
+  bool success = 3;
+
+  // List of errors found in this layer
+  repeated ValidationError errors = 4;
+
+  // List of warnings (if any)
+  repeated ValidationError warnings = 5;
+}
+
+// Validation error or warning
+message ValidationError {
+  // Error level (ERROR, WARN, INFO)
+  string level = 1;
+
+  // Error message
+  string message = 2;
+
+  // Location in the document (line number if available)
+  string location = 3;
+
+  // XPath or other locator
+  string xpath = 4;
+
+  // Test ID (for Schematron rules)
+  string test_id = 5;
+
+  // Additional error details
+  map<string, string> details = 6;
+}
