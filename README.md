@@ -128,4 +128,3 @@ Apache License 2.0
 
 - [phive](https://github.com/phax/phive) - Core validation engine
 - [phive-rules](https://github.com/phax/phive-rules) - Pre-built validation rules
-- [Invopop](https://invopop.com) - Electronic invoicing solutions
