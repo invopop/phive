@@ -40,28 +40,32 @@ public class PhiveRulesInitializer {
             registry = new ValidationExecutorSetRegistry<>();
 
             // Register phive-rules validation sets to our registry
-            // Each phive-rules library has an initStandard() method that registers its VES
+            // Each phive-rules library has different init methods
+            // IMPORTANT: EN16931 must be registered BEFORE ZUGFeRD as ZUGFeRD depends on it
 
             // EN 16931 (European e-invoicing standard)
-            registerRules("com.helger.phive.en16931.EN16931Validation");
+            registerRules("com.helger.phive.en16931.EN16931Validation", "initEN16931");
 
             // Peppol BIS (Business Interoperability Specifications)
-            registerRules("com.helger.phive.peppol.PeppolValidation");
+            registerRules("com.helger.phive.peppol.PeppolValidation", "initStandard");
 
-            // UBL (Universal Business Language)
-            registerRules("com.helger.phive.ubl.UBLValidation");
+            // UBL (Universal Business Language) - registers all UBL versions
+            registerRules("com.helger.phive.ubl.UBLValidation", "initUBLAllVersions");
 
-            // CII (Cross Industry Invoice)
-            registerRules("com.helger.phive.cii.CIIValidation");
+            // CII (Cross Industry Invoice) - registers both D16B and D22B
+            registerRules("com.helger.phive.cii.CIIValidation", "initCII");
 
             // XRechnung (German e-invoicing)
-            registerRules("com.helger.phive.xrechnung.XRechnungValidation");
+            registerRules("com.helger.phive.xrechnung.XRechnungValidation", "initXRechnung");
 
             // FacturaE (Spanish e-invoicing)
-            registerRules("com.helger.phive.facturae.FacturaeValidation");
+            registerRules("com.helger.phive.facturae.FacturaeValidation", "initFacturaE");
 
             // FatturaPA (Italian e-invoicing)
-            registerRules("com.helger.phive.fatturapa.FatturaPAValidation");
+            registerRules("com.helger.phive.fatturapa.FatturaPAValidation", "initFatturaPA");
+
+            // ZUGFeRD (German hybrid invoice format)
+            registerRules("com.helger.phive.zugferd.ZugferdValidation", "initZugferd");
 
             // Log the number of registered validation executor sets
             final int count = registry.getAll().size();
@@ -75,22 +79,23 @@ public class PhiveRulesInitializer {
     }
 
     /**
-     * Registers validation rules from a phive-rules class by calling its initStandard method.
+     * Registers validation rules from a phive-rules class by calling its init method.
      * If the class is not found, logs a warning but doesn't fail.
      *
      * @param className The fully qualified class name
+     * @param methodName The init method name (e.g., "initStandard", "initUBLAllVersions")
      */
-    private void registerRules(final String className) {
+    private void registerRules(final String className, final String methodName) {
         try {
             final Class<?> clazz = Class.forName(className);
-            final java.lang.reflect.Method method = clazz.getMethod("initStandard",
+            final java.lang.reflect.Method method = clazz.getMethod(methodName,
                     com.helger.phive.api.executorset.IValidationExecutorSetRegistry.class);
             method.invoke(null, registry);
-            LOGGER.debug("Registered validation rules from: {}", className);
+            LOGGER.debug("Registered validation rules from: {} ({})", className, methodName);
         } catch (final ClassNotFoundException ex) {
             LOGGER.warn("Validation rules class not found (dependency may not be included): {}", className);
         } catch (final NoSuchMethodException ex) {
-            LOGGER.warn("Class {} does not have initStandard method", className);
+            LOGGER.warn("Class {} does not have {} method", className, methodName);
         } catch (final Exception ex) {
             LOGGER.error("Error registering validation rules from: {}", className, ex);
         }

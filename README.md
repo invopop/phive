@@ -6,8 +6,10 @@ Built using the [phive](https://github.com/phax/phive) and [phive-rules](https:/
 
 ## What it does
 
-- **List VESIDs**: Get all available validation rule sets (105+ included)
+- **List VESIDs**: Get all available validation rule sets (470+ included)
 - **Validate XML**: Validate invoices and documents against standards like Peppol, EN 16931, XRechnung, UBL, CII, and more
+
+**Note:** Many validation sets are marked as `deprecated` - filter by `status: "valid"` to get current rule sets.
 
 ## Quick Start
 
@@ -15,19 +17,31 @@ Built using the [phive](https://github.com/phax/phive) and [phive-rules](https:/
 # Start the service
 docker run -d -p 9090:9090 invopop/phive-grpc-service
 
+# Clone repo to get proto file
+git clone https://github.com/invopop/phive.git
+cd phive
+
 # List all available validation rule sets
-grpcurl -plaintext -d '{"filter":""}' localhost:9090 invopop.phive.v1.ValidationService/ListVesIds
+grpcurl -plaintext \
+  -import-path src/main/proto \
+  -proto validation.proto \
+  -d '{"filter":""}' \
+  localhost:9090 invopop.phive.v1.ValidationService/ListVesIds
 
 # Filter by keyword
-grpcurl -plaintext -d '{"filter":"peppol"}' localhost:9090 invopop.phive.v1.ValidationService/ListVesIds
+grpcurl -plaintext \
+  -import-path src/main/proto \
+  -proto validation.proto \
+  -d '{"filter":"peppol"}' \
+  localhost:9090 invopop.phive.v1.ValidationService/ListVesIds
 
-# Validate XML (using proto file)
+# Validate XML (use -w 0 to prevent newlines in base64 output)
 grpcurl -plaintext \
   -import-path src/main/proto \
   -proto validation.proto \
   -d '{
-    "vesid": "eu.peppol.bis3:invoice:2024.5",
-    "xml_content": "'$(base64 < invoice.xml)'"
+    "vesid": "un.unece.uncefact:crossindustryinvoice:D22B",
+    "xml_content": "'$(base64 -w 0 < invoice.xml)'"
   }' \
   localhost:9090 invopop.phive.v1.ValidationService/ValidateXml
 ```
@@ -111,12 +125,15 @@ Set environment variables:
 - **Peppol BIS 3** - Peppol Business Interoperability Specifications
 - **EN 16931** - European e-invoicing standard
 - **XRechnung** - German e-invoicing
-- **UBL** - Universal Business Language
-- **CII** - Cross Industry Invoice
+- **UBL** - Universal Business Language (all versions)
+- **CII** - Cross Industry Invoice (D16B, D22B)
 - **FacturaE** - Spanish e-invoicing
 - **FatturaPA** - Italian e-invoicing
+- **ZUGFeRD** - German e-invoicing format
+- **Factur-X** - French e-invoicing
 
-Total: **105+ validation rule sets**
+
+Many rule sets are deprecated.
 
 See [phive-rules](https://github.com/phax/phive-rules) for the complete list.
 

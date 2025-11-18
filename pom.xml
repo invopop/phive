@@ -144,6 +144,13 @@
       <version>${phive-rules.version}</version>
     </dependency>
 
+    <!-- ZUGFeRD (German hybrid invoice format) -->
+    <dependency>
+      <groupId>com.helger.phive.rules</groupId>
+      <artifactId>phive-rules-zugferd</artifactId>
+      <version>${phive-rules.version}</version>
+    </dependency>
+
     <!-- Add more phive-rules dependencies as needed -->
     <!-- Uncomment the ones you need:
     <dependency>
@@ -203,6 +210,19 @@
       <groupId>jakarta.annotation</groupId>
       <artifactId>jakarta.annotation-api</artifactId>
       <version>2.1.1</version>
+    </dependency>
+
+    <!-- JAXB Runtime (required for Java 17+, needed by ph-schematron) -->
+    <dependency>
+      <groupId>jakarta.xml.bind</groupId>
+      <artifactId>jakarta.xml.bind-api</artifactId>
+      <version>4.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.jaxb</groupId>
+      <artifactId>jaxb-runtime</artifactId>
+      <version>4.0.3</version>
+      <scope>runtime</scope>
     </dependency>
 
     <!-- Test dependencies -->
