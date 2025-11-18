@@ -6,7 +6,7 @@ Built using the [phive](https://github.com/phax/phive) and [phive-rules](https:/
 
 ## What it does
 
-- **List VESIDs**: Get all available validation rule sets (470+ included)
+- **List VESIDs**: Get all available validation rule sets
 - **Validate XML**: Validate invoices and documents against standards like Peppol, EN 16931, XRechnung, UBL, CII, and more
 
 **Note:** Many validation sets are marked as `deprecated` - filter by `status: "valid"` to get current rule sets.
@@ -133,7 +133,7 @@ Set environment variables:
 - **Factur-X** - French e-invoicing
 
 
-Many rule sets are deprecated.
+Many rule sets are deprecated so you may need to filter by status on your end.
 
 See [phive-rules](https://github.com/phax/phive-rules) for the complete list.
 
