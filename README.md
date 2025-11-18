@@ -2,7 +2,7 @@
 
 A gRPC wrapper for [phive](https://github.com/phax/phive) (Philip Helger Integrative Validation Engine) that validates XML documents against e-invoicing standards.
 
-Built with ❤️ by [Invopop](https://invopop.com) using the excellent [phive](https://github.com/phax/phive) and [phive-rules](https://github.com/phax/phive-rules) libraries by [@phax](https://github.com/phax).
+Built using the [phive](https://github.com/phax/phive) and [phive-rules](https://github.com/phax/phive-rules) libraries by [@phax](https://github.com/phax).
 
 ## What it does
 
