@@ -25,6 +25,7 @@ import rpc.ValidationServiceImpl;
 
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
+import io.grpc.protobuf.services.ProtoReflectionService;
 
 /**
  * Main gRPC server for Phive validation service.
@@ -55,6 +56,7 @@ public class PhiveGrpcServer {
         // Build and start gRPC server
         server = ServerBuilder.forPort(port)
                 .addService(validationService)
+                .addService(ProtoReflectionService.newInstance())
                 .build()
                 .start();
 
