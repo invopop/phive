@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.invopop.phive.rpc;
+package rpc;
 
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
@@ -32,9 +32,9 @@ import com.helger.phive.api.executorset.ValidationExecutorSetRegistry;
 import com.helger.phive.api.result.ValidationResult;
 import com.helger.phive.api.result.ValidationResultList;
 import com.helger.phive.api.source.IValidationSource;
-import com.invopop.phive.config.PhiveRulesInitializer;
 import com.helger.phive.xml.source.ValidationSourceXML;
 import com.helger.xml.serialize.read.DOMReader;
+import config.PhiveRulesInitializer;
 
 import io.grpc.stub.StreamObserver;
 import jakarta.annotation.Nonnull;

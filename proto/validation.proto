@@ -2,7 +2,8 @@ syntax = "proto3";
 
 package invopop.phive.v1;
 
-option java_package = "com.invopop.phive.rpc";
+option go_package = "github.com/invopop/phive/proto;proto";
+option java_package = "rpc";
 option java_outer_classname = "ValidationProto";
 
 // Service definition for phive validation operations

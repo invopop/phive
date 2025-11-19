@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.invopop.phive;
+package main;
 
 import java.io.IOException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.invopop.phive.config.PhiveRulesInitializer;
-import com.invopop.phive.rpc.ValidationServiceImpl;
+import config.PhiveRulesInitializer;
+import rpc.ValidationServiceImpl;
 
 import io.grpc.Server;
 import io.grpc.ServerBuilder;

@@ -1,3 +1,4 @@
+# Java
 target/
 .idea/
 *.iml
@@ -7,3 +8,9 @@ target/
 *.class
 *.log
 dependency-reduced-pom.xml
+
+# Go
+vendor/
+
+# Editor
+.claude

@@ -20,9 +20,10 @@ FROM maven:3.9-eclipse-temurin-17 AS build
 
 WORKDIR /build
 
-# Copy the project files for single-module build
+# Copy the project files
 COPY pom.xml .
 COPY src ./src
+COPY proto ./proto
 
 # Build the application
 RUN mvn clean package -DskipTests

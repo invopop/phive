@@ -13,31 +13,87 @@ Built using the [phive](https://github.com/phax/phive) and [phive-rules](https:/
 
 ## Quick Start
 
+### Using Docker
+
 ```bash
 # Start the service
 docker run -d -p 9090:9090 invopop/phive-grpc-service
+```
 
+### Using Go Client
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"log"
+
+	"github.com/invopop/phive"
+)
+
+func main() {
+	// Create client
+	client, err := phive.NewClient("localhost:9090")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer client.Close()
+
+	ctx := context.Background()
+
+	// List validation rule sets
+	resp, err := client.ListVesIds(ctx, "peppol")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for _, vesid := range resp.Vesids {
+		if vesid.Status == "valid" {
+			fmt.Printf("%s: %s\n", vesid.Vesid, vesid.Name)
+		}
+	}
+
+	// Validate XML
+	xmlContent := []byte(`<xml>...</xml>`)
+	result, err := client.ValidateXML(ctx,
+		"eu.peppol.bis3:invoice:2024.5",
+		xmlContent,
+		"my-invoice-id",
+	)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Printf("Valid: %v\n", result.Success)
+}
+```
+
+### Using grpcurl
+
+```bash
 # Clone repo to get proto file
 git clone https://github.com/invopop/phive.git
 cd phive
 
 # List all available validation rule sets
 grpcurl -plaintext \
-  -import-path src/main/proto \
+  -import-path proto \
   -proto validation.proto \
   -d '{"filter":""}' \
   localhost:9090 invopop.phive.v1.ValidationService/ListVesIds
 
 # Filter by keyword
 grpcurl -plaintext \
-  -import-path src/main/proto \
+  -import-path proto \
   -proto validation.proto \
   -d '{"filter":"peppol"}' \
   localhost:9090 invopop.phive.v1.ValidationService/ListVesIds
 
 # Validate XML (use -w 0 to prevent newlines in base64 output)
 grpcurl -plaintext \
-  -import-path src/main/proto \
+  -import-path proto \
   -proto validation.proto \
   -d '{
     "vesid": "un.unece.uncefact:crossindustryinvoice:D22B",
@@ -102,6 +158,17 @@ Validate an XML document against a specific VESID.
     }
   ]
 }
+```
+
+## Proto Files
+
+The proto definitions are available in the `proto/` directory and can be used directly in any language:
+
+```bash
+# For Go
+protoc --go_out=. --go_opt=paths=source_relative \
+  --go-grpc_out=. --go-grpc_opt=paths=source_relative \
+  proto/validation.proto
 ```
 
 ## Building
