@@ -72,34 +72,32 @@ func main() {
 
 ### Using grpcurl
 
-```bash
-# Clone repo to get proto file
-git clone https://github.com/invopop/phive.git
-cd phive
+The service has gRPC reflection enabled, so you don't need proto files:
 
+```bash
 # List all available validation rule sets
 grpcurl -plaintext \
-  -import-path protocol \
-  -proto validation.proto \
   -d '{"filter":""}' \
   localhost:9090 invopop.phive.v1.ValidationService/ListVesIds
 
 # Filter by keyword
 grpcurl -plaintext \
-  -import-path protocol \
-  -proto validation.proto \
   -d '{"filter":"peppol"}' \
   localhost:9090 invopop.phive.v1.ValidationService/ListVesIds
 
 # Validate XML (use -w 0 to prevent newlines in base64 output)
 grpcurl -plaintext \
-  -import-path protocol \
-  -proto validation.proto \
   -d '{
     "vesid": "un.unece.uncefact:crossindustryinvoice:D22B",
     "xml_content": "'$(base64 -w 0 < invoice.xml)'"
   }' \
   localhost:9090 invopop.phive.v1.ValidationService/ValidateXml
+
+# List all available services (uses reflection)
+grpcurl -plaintext localhost:9090 list
+
+# Describe the ValidationService
+grpcurl -plaintext localhost:9090 describe invopop.phive.v1.ValidationService
 ```
 
 ## API
@@ -160,9 +158,18 @@ Validate an XML document against a specific VESID.
 }
 ```
 
-## Proto Files
+## gRPC Reflection
 
-The proto definitions are available in the `protocol/` directory and can be used directly in any language:
+This service has **gRPC reflection enabled**, making it easy to explore and test the API without proto files.
+
+### Benefits
+- Use `grpcurl` without managing proto files
+- Explore available methods and messages dynamically
+- Perfect for testing and development in private clusters
+
+### Proto Files (Optional)
+
+If you need the proto definitions for code generation, they're available in the `protocol/` directory:
 
 ```bash
 # For Go
@@ -170,6 +177,8 @@ protoc --go_out=. --go_opt=paths=source_relative \
   --go-grpc_out=. --go-grpc_opt=paths=source_relative \
   protocol/validation.proto
 ```
+
+**Note:** Reflection is enabled because this service runs in private clusters. For public internet-facing deployments, consider disabling it by removing `ProtoReflectionService` from the server builder.
 
 ## Building
 
