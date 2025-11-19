@@ -79,21 +79,21 @@ cd phive
 
 # List all available validation rule sets
 grpcurl -plaintext \
-  -import-path proto \
+  -import-path protocol \
   -proto validation.proto \
   -d '{"filter":""}' \
   localhost:9090 invopop.phive.v1.ValidationService/ListVesIds
 
 # Filter by keyword
 grpcurl -plaintext \
-  -import-path proto \
+  -import-path protocol \
   -proto validation.proto \
   -d '{"filter":"peppol"}' \
   localhost:9090 invopop.phive.v1.ValidationService/ListVesIds
 
 # Validate XML (use -w 0 to prevent newlines in base64 output)
 grpcurl -plaintext \
-  -import-path proto \
+  -import-path protocol \
   -proto validation.proto \
   -d '{
     "vesid": "un.unece.uncefact:crossindustryinvoice:D22B",
@@ -162,13 +162,13 @@ Validate an XML document against a specific VESID.
 
 ## Proto Files
 
-The proto definitions are available in the `proto/` directory and can be used directly in any language:
+The proto definitions are available in the `protocol/` directory and can be used directly in any language:
 
 ```bash
 # For Go
 protoc --go_out=. --go_opt=paths=source_relative \
   --go-grpc_out=. --go-grpc_opt=paths=source_relative \
-  proto/validation.proto
+  protocol/validation.proto
 ```
 
 ## Building

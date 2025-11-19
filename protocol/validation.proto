@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package invopop.phive.v1;
 
-option go_package = "github.com/invopop/phive/proto;proto";
+option go_package = "github.com/invopop/phive/protocol;protocol";
 option java_package = "rpc";
 option java_outer_classname = "ValidationProto";
 

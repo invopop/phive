@@ -2,9 +2,9 @@
 // versions:
 // 	protoc-gen-go v1.36.9
 // 	protoc        v6.32.1
-// source: proto/validation.proto
+// source: protocol/validation.proto
 
-package proto
+package protocol
 
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -32,7 +32,7 @@ type ListVesIdsRequest struct {
 
 func (x *ListVesIdsRequest) Reset() {
 	*x = ListVesIdsRequest{}
-	mi := &file_proto_validation_proto_msgTypes[0]
+	mi := &file_protocol_validation_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -44,7 +44,7 @@ func (x *ListVesIdsRequest) String() string {
 func (*ListVesIdsRequest) ProtoMessage() {}
 
 func (x *ListVesIdsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_validation_proto_msgTypes[0]
+	mi := &file_protocol_validation_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -57,7 +57,7 @@ func (x *ListVesIdsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListVesIdsRequest.ProtoReflect.Descriptor instead.
 func (*ListVesIdsRequest) Descriptor() ([]byte, []int) {
-	return file_proto_validation_proto_rawDescGZIP(), []int{0}
+	return file_protocol_validation_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *ListVesIdsRequest) GetFilter() string {
@@ -80,7 +80,7 @@ type ListVesIdsResponse struct {
 
 func (x *ListVesIdsResponse) Reset() {
 	*x = ListVesIdsResponse{}
-	mi := &file_proto_validation_proto_msgTypes[1]
+	mi := &file_protocol_validation_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -92,7 +92,7 @@ func (x *ListVesIdsResponse) String() string {
 func (*ListVesIdsResponse) ProtoMessage() {}
 
 func (x *ListVesIdsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_validation_proto_msgTypes[1]
+	mi := &file_protocol_validation_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -105,7 +105,7 @@ func (x *ListVesIdsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListVesIdsResponse.ProtoReflect.Descriptor instead.
 func (*ListVesIdsResponse) Descriptor() ([]byte, []int) {
-	return file_proto_validation_proto_rawDescGZIP(), []int{1}
+	return file_protocol_validation_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *ListVesIdsResponse) GetVesids() []*VesIdInfo {
@@ -139,7 +139,7 @@ type VesIdInfo struct {
 
 func (x *VesIdInfo) Reset() {
 	*x = VesIdInfo{}
-	mi := &file_proto_validation_proto_msgTypes[2]
+	mi := &file_protocol_validation_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -151,7 +151,7 @@ func (x *VesIdInfo) String() string {
 func (*VesIdInfo) ProtoMessage() {}
 
 func (x *VesIdInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_validation_proto_msgTypes[2]
+	mi := &file_protocol_validation_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -164,7 +164,7 @@ func (x *VesIdInfo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use VesIdInfo.ProtoReflect.Descriptor instead.
 func (*VesIdInfo) Descriptor() ([]byte, []int) {
-	return file_proto_validation_proto_rawDescGZIP(), []int{2}
+	return file_protocol_validation_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *VesIdInfo) GetVesid() string {
@@ -211,7 +211,7 @@ type ValidateXmlRequest struct {
 
 func (x *ValidateXmlRequest) Reset() {
 	*x = ValidateXmlRequest{}
-	mi := &file_proto_validation_proto_msgTypes[3]
+	mi := &file_protocol_validation_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -223,7 +223,7 @@ func (x *ValidateXmlRequest) String() string {
 func (*ValidateXmlRequest) ProtoMessage() {}
 
 func (x *ValidateXmlRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_validation_proto_msgTypes[3]
+	mi := &file_protocol_validation_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -236,7 +236,7 @@ func (x *ValidateXmlRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ValidateXmlRequest.ProtoReflect.Descriptor instead.
 func (*ValidateXmlRequest) Descriptor() ([]byte, []int) {
-	return file_proto_validation_proto_rawDescGZIP(), []int{3}
+	return file_protocol_validation_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *ValidateXmlRequest) GetVesid() string {
@@ -279,7 +279,7 @@ type ValidateXmlResponse struct {
 
 func (x *ValidateXmlResponse) Reset() {
 	*x = ValidateXmlResponse{}
-	mi := &file_proto_validation_proto_msgTypes[4]
+	mi := &file_protocol_validation_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -291,7 +291,7 @@ func (x *ValidateXmlResponse) String() string {
 func (*ValidateXmlResponse) ProtoMessage() {}
 
 func (x *ValidateXmlResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_validation_proto_msgTypes[4]
+	mi := &file_protocol_validation_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -304,7 +304,7 @@ func (x *ValidateXmlResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ValidateXmlResponse.ProtoReflect.Descriptor instead.
 func (*ValidateXmlResponse) Descriptor() ([]byte, []int) {
-	return file_proto_validation_proto_rawDescGZIP(), []int{4}
+	return file_protocol_validation_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *ValidateXmlResponse) GetSuccess() bool {
@@ -361,7 +361,7 @@ type ValidationLayerResult struct {
 
 func (x *ValidationLayerResult) Reset() {
 	*x = ValidationLayerResult{}
-	mi := &file_proto_validation_proto_msgTypes[5]
+	mi := &file_protocol_validation_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -373,7 +373,7 @@ func (x *ValidationLayerResult) String() string {
 func (*ValidationLayerResult) ProtoMessage() {}
 
 func (x *ValidationLayerResult) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_validation_proto_msgTypes[5]
+	mi := &file_protocol_validation_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -386,7 +386,7 @@ func (x *ValidationLayerResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ValidationLayerResult.ProtoReflect.Descriptor instead.
 func (*ValidationLayerResult) Descriptor() ([]byte, []int) {
-	return file_proto_validation_proto_rawDescGZIP(), []int{5}
+	return file_protocol_validation_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *ValidationLayerResult) GetValidationType() string {
@@ -445,7 +445,7 @@ type ValidationError struct {
 
 func (x *ValidationError) Reset() {
 	*x = ValidationError{}
-	mi := &file_proto_validation_proto_msgTypes[6]
+	mi := &file_protocol_validation_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -457,7 +457,7 @@ func (x *ValidationError) String() string {
 func (*ValidationError) ProtoMessage() {}
 
 func (x *ValidationError) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_validation_proto_msgTypes[6]
+	mi := &file_protocol_validation_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -470,7 +470,7 @@ func (x *ValidationError) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ValidationError.ProtoReflect.Descriptor instead.
 func (*ValidationError) Descriptor() ([]byte, []int) {
-	return file_proto_validation_proto_rawDescGZIP(), []int{6}
+	return file_protocol_validation_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *ValidationError) GetLevel() string {
@@ -515,11 +515,11 @@ func (x *ValidationError) GetDetails() map[string]string {
 	return nil
 }
 
-var File_proto_validation_proto protoreflect.FileDescriptor
+var File_protocol_validation_proto protoreflect.FileDescriptor
 
-const file_proto_validation_proto_rawDesc = "" +
+const file_protocol_validation_proto_rawDesc = "" +
 	"\n" +
-	"\x16proto/validation.proto\x12\x10invopop.phive.v1\"+\n" +
+	"\x19protocol/validation.proto\x12\x10invopop.phive.v1\"+\n" +
 	"\x11ListVesIdsRequest\x12\x16\n" +
 	"\x06filter\x18\x01 \x01(\tR\x06filter\"n\n" +
 	"\x12ListVesIdsResponse\x123\n" +
@@ -561,23 +561,23 @@ const file_proto_validation_proto_rawDesc = "" +
 	"\x11ValidationService\x12W\n" +
 	"\n" +
 	"ListVesIds\x12#.invopop.phive.v1.ListVesIdsRequest\x1a$.invopop.phive.v1.ListVesIdsResponse\x12Z\n" +
-	"\vValidateXml\x12$.invopop.phive.v1.ValidateXmlRequest\x1a%.invopop.phive.v1.ValidateXmlResponseBN\n" +
-	"\x15com.invopop.phive.rpcB\x0fValidationProtoZ$github.com/invopop/phive/proto;protob\x06proto3"
+	"\vValidateXml\x12$.invopop.phive.v1.ValidateXmlRequest\x1a%.invopop.phive.v1.ValidateXmlResponseBB\n" +
+	"\x03rpcB\x0fValidationProtoZ*github.com/invopop/phive/protocol;protocolb\x06proto3"
 
 var (
-	file_proto_validation_proto_rawDescOnce sync.Once
-	file_proto_validation_proto_rawDescData []byte
+	file_protocol_validation_proto_rawDescOnce sync.Once
+	file_protocol_validation_proto_rawDescData []byte
 )
 
-func file_proto_validation_proto_rawDescGZIP() []byte {
-	file_proto_validation_proto_rawDescOnce.Do(func() {
-		file_proto_validation_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_proto_validation_proto_rawDesc), len(file_proto_validation_proto_rawDesc)))
+func file_protocol_validation_proto_rawDescGZIP() []byte {
+	file_protocol_validation_proto_rawDescOnce.Do(func() {
+		file_protocol_validation_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_protocol_validation_proto_rawDesc), len(file_protocol_validation_proto_rawDesc)))
 	})
-	return file_proto_validation_proto_rawDescData
+	return file_protocol_validation_proto_rawDescData
 }
 
-var file_proto_validation_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
-var file_proto_validation_proto_goTypes = []any{
+var file_protocol_validation_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+var file_protocol_validation_proto_goTypes = []any{
 	(*ListVesIdsRequest)(nil),     // 0: invopop.phive.v1.ListVesIdsRequest
 	(*ListVesIdsResponse)(nil),    // 1: invopop.phive.v1.ListVesIdsResponse
 	(*VesIdInfo)(nil),             // 2: invopop.phive.v1.VesIdInfo
@@ -587,7 +587,7 @@ var file_proto_validation_proto_goTypes = []any{
 	(*ValidationError)(nil),       // 6: invopop.phive.v1.ValidationError
 	nil,                           // 7: invopop.phive.v1.ValidationError.DetailsEntry
 }
-var file_proto_validation_proto_depIdxs = []int32{
+var file_protocol_validation_proto_depIdxs = []int32{
 	2, // 0: invopop.phive.v1.ListVesIdsResponse.vesids:type_name -> invopop.phive.v1.VesIdInfo
 	5, // 1: invopop.phive.v1.ValidateXmlResponse.results:type_name -> invopop.phive.v1.ValidationLayerResult
 	6, // 2: invopop.phive.v1.ValidationLayerResult.errors:type_name -> invopop.phive.v1.ValidationError
@@ -604,26 +604,26 @@ var file_proto_validation_proto_depIdxs = []int32{
 	0, // [0:5] is the sub-list for field type_name
 }
 
-func init() { file_proto_validation_proto_init() }
-func file_proto_validation_proto_init() {
-	if File_proto_validation_proto != nil {
+func init() { file_protocol_validation_proto_init() }
+func file_protocol_validation_proto_init() {
+	if File_protocol_validation_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_validation_proto_rawDesc), len(file_proto_validation_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_protocol_validation_proto_rawDesc), len(file_protocol_validation_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_proto_validation_proto_goTypes,
-		DependencyIndexes: file_proto_validation_proto_depIdxs,
-		MessageInfos:      file_proto_validation_proto_msgTypes,
+		GoTypes:           file_protocol_validation_proto_goTypes,
+		DependencyIndexes: file_protocol_validation_proto_depIdxs,
+		MessageInfos:      file_protocol_validation_proto_msgTypes,
 	}.Build()
-	File_proto_validation_proto = out.File
-	file_proto_validation_proto_goTypes = nil
-	file_proto_validation_proto_depIdxs = nil
+	File_protocol_validation_proto = out.File
+	file_protocol_validation_proto_goTypes = nil
+	file_protocol_validation_proto_depIdxs = nil
 }
