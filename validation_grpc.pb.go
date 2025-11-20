@@ -2,9 +2,9 @@
 // versions:
 // - protoc-gen-go-grpc v1.5.1
 // - protoc             v6.32.1
-// source: protocol/validation.proto
+// source: validation.proto
 
-package protocol
+package phive
 
 import (
 	context "context"
@@ -163,5 +163,5 @@ var ValidationService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "protocol/validation.proto",
+	Metadata: "validation.proto",
 }

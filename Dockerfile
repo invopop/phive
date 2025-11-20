@@ -23,7 +23,7 @@ WORKDIR /build
 # Copy the project files
 COPY pom.xml .
 COPY src ./src
-COPY protocol ./protocol
+COPY validation.proto .
 
 # Build the application
 RUN mvn clean package -DskipTests
