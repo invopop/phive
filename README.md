@@ -20,7 +20,9 @@ Built using the [phive](https://github.com/phax/phive) and [phive-rules](https:/
 docker run -d -p 9090:9090 invopop/phive-grpc-service
 ```
 
-### Using Go Client
+### Using Go
+
+Import the protocol package directly:
 
 ```go
 package main
@@ -29,22 +31,32 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"os"
+
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 
 	"github.com/invopop/phive"
 )
 
 func main() {
-	// Create client
-	client, err := phive.NewClient("localhost:9090")
+	// Create gRPC connection
+	conn, err := grpc.NewClient(
+		"localhost:9090",
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+	)
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer client.Close()
+	defer conn.Close()
 
+	client := phive.NewValidationServiceClient(conn)
 	ctx := context.Background()
 
 	// List validation rule sets
-	resp, err := client.ListVesIds(ctx, "peppol")
+	resp, err := client.ListVesIds(ctx, &phive.ListVesIdsRequest{
+		Filter: "peppol",
+	})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -56,12 +68,16 @@ func main() {
 	}
 
 	// Validate XML
-	xmlContent := []byte(`<xml>...</xml>`)
-	result, err := client.ValidateXML(ctx,
-		"eu.peppol.bis3:invoice:2024.5",
-		xmlContent,
-		"my-invoice-id",
-	)
+	xmlContent, err := os.ReadFile("invoice.xml")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	result, err := client.ValidateXml(ctx, &phive.ValidateXmlRequest{
+		Vesid:            "eu.peppol.bis3:invoice:2024.5",
+		XmlContent:       xmlContent,
+		SourceIdentifier: "my-invoice-id",
+	})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -167,15 +183,18 @@ This service has **gRPC reflection enabled**, making it easy to explore and test
 - Explore available methods and messages dynamically
 - Perfect for testing and development in private clusters
 
-### Proto Files (Optional)
+### Protocol Files
 
-If you need the proto definitions for code generation, they're available in the `protocol/` directory:
+The proto definition and generated Go files are at the root:
+- `validation.proto` - Protocol definition
+- `validation.pb.go` - Protocol buffer messages
+- `validation_grpc.pb.go` - gRPC service definitions
 
+To regenerate the Go files:
 ```bash
-# For Go
 protoc --go_out=. --go_opt=paths=source_relative \
   --go-grpc_out=. --go-grpc_opt=paths=source_relative \
-  protocol/validation.proto
+  validation.proto
 ```
 
 **Note:** Reflection is enabled because this service runs in private clusters. For public internet-facing deployments, consider disabling it by removing `ProtoReflectionService` from the server builder.
