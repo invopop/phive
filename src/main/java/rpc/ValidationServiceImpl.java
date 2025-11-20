@@ -17,6 +17,7 @@ package rpc;
 
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
+import java.util.Locale;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -206,7 +207,7 @@ public class ValidationServiceImpl extends ValidationServiceGrpc.ValidationServi
                             final ValidationProto.ValidationError.Builder errorBuilder =
                                     ValidationProto.ValidationError.newBuilder()
                                     .setLevel(error.getErrorLevel().getID())
-                                    .setMessage(error.getErrorText(null));
+                                    .setMessage(error.getErrorText(Locale.US));
 
                             // Add location if available
                             if (error.hasErrorLocation()) {
