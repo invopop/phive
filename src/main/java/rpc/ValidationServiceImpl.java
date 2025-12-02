@@ -22,11 +22,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 
-import com.helger.commons.collection.impl.ICommonsList;
-import com.helger.commons.error.level.IErrorLevel;
-import com.helger.commons.error.list.ErrorList;
+import com.helger.collection.commons.ICommonsList;
+import com.helger.diagnostics.error.level.IErrorLevel;
+import com.helger.diagnostics.error.list.ErrorList;
 import com.helger.diver.api.coord.DVRCoordinate;
 import com.helger.phive.api.execute.ValidationExecutionManager;
+import com.helger.phive.api.validity.IValidityDeterminator;
 import com.helger.phive.api.executorset.IValidationExecutorSet;
 import com.helger.phive.api.executorset.ValidationExecutorSetRegistry;
 import com.helger.phive.api.result.ValidationResult;
@@ -163,6 +164,7 @@ public class ValidationServiceImpl extends ValidationServiceGrpc.ValidationServi
 
             // Execute validation
             final ValidationResultList resultList = ValidationExecutionManager.executeValidation(
+                    IValidityDeterminator.createDefault(),
                     ves,
                     validationSource);
 
