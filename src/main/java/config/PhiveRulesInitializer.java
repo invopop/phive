@@ -67,6 +67,9 @@ public class PhiveRulesInitializer {
             // ZUGFeRD (German hybrid invoice format)
             registerRules("com.helger.phive.zugferd.ZugferdValidation", "initZugferd");
 
+            // France CTC (Chorus Pro - French e-invoicing)
+            registerRules("com.helger.phive.france.FranceCTCValidation", "initFranceCTC");
+
             // Log the number of registered validation executor sets
             final int count = registry.getAll().size();
 
