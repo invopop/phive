@@ -225,7 +225,8 @@ Set environment variables:
 - **FacturaE** - Spanish e-invoicing
 - **FatturaPA** - Italian e-invoicing
 - **ZUGFeRD** - German e-invoicing format
-- **Factur-X** - French e-invoicing
+- **Factur-X** - French pdf+xml e-invoicing
+- **France-CTC** - French e-invoicing
 
 
 Many rule sets are deprecated so you may need to filter by status on your end.
