@@ -36,10 +36,6 @@ WORKDIR /app
 # Copy the built JAR from build stage
 COPY --from=build /build/target/phive-grpc-service-*.jar /app/phive-service.jar
 
-# Expose ports
-# 9090 - gRPC server for validation requests
-EXPOSE 9090
-
 # Set JVM options
 ENV JAVA_OPTS="-Xms256m -Xmx1024m"
 
