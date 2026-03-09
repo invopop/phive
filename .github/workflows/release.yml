@@ -62,9 +62,10 @@ jobs:
         run: |
           docker image tag ${{ env.IMAGE_NAME }} ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.REPO_VERSION }}
 
-      - name: Tag latest (main push only)
+      - name: Tag latest main release
         if: env.COMMIT_TYPE != 'tags'
         run: |
+          docker image tag ${{ env.IMAGE_NAME }} ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${GITHUB_REF##*/}-${{ env.REPO_VERSION }}-$(date +'%Y%m%dT%H%M')
           docker image tag ${{ env.IMAGE_NAME }} ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
 
       - name: Publish
