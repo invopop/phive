@@ -70,6 +70,9 @@ public class PhiveRulesInitializer {
             // France CTC (Chorus Pro - French e-invoicing)
             registerRules("com.helger.phive.france.FranceCTCValidation", "initFranceCTC");
 
+            // ZATCA (Saudi Arabia e-invoicing)
+            registerRules("com.helger.phive.zatca.ZATCAValidation", "initZATCA");
+
             // Log the number of registered validation executor sets
             final int count = registry.getAll().size();
 

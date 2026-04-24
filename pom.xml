@@ -158,6 +158,13 @@
       <version>${phive-rules.version}</version>
     </dependency>
 
+    <!-- ZATCA (Saudi Arabia e-invoice) -->
+    <dependency>
+      <groupId>com.helger.phive.rules</groupId>
+      <artifactId>phive-rules-zatca</artifactId>
+      <version>${phive-rules.version}</version>
+    </dependency>
+
     <!-- Add more phive-rules dependencies as needed -->
     <!-- Uncomment the ones you need:
     <dependency>
