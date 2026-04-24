@@ -21,20 +21,31 @@ import java.util.Locale;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import com.helger.collection.commons.ICommonsList;
 import com.helger.diagnostics.error.level.IErrorLevel;
 import com.helger.diagnostics.error.list.ErrorList;
 import com.helger.diver.api.coord.DVRCoordinate;
+import com.helger.phive.api.artefact.IValidationArtefact;
 import com.helger.phive.api.execute.ValidationExecutionManager;
+import com.helger.phive.api.result.ValidationResult;
+import com.helger.phive.api.result.ValidationResultList;
+import com.helger.phive.api.validity.EExtendedValidity;
 import com.helger.phive.api.validity.IValidityDeterminator;
 import com.helger.phive.api.executorset.IValidationExecutorSet;
 import com.helger.phive.api.executorset.ValidationExecutorSetRegistry;
-import com.helger.phive.api.result.ValidationResult;
-import com.helger.phive.api.result.ValidationResultList;
 import com.helger.phive.api.source.IValidationSource;
 import com.helger.phive.xml.source.ValidationSourceXML;
+import com.helger.schematron.svrl.SVRLFailedAssert;
+import com.helger.schematron.svrl.SVRLHelper;
+import com.helger.schematron.svrl.SVRLMarshaller;
+import com.helger.schematron.svrl.SVRLSuccessfulReport;
+import com.helger.schematron.svrl.jaxb.SchematronOutputType;
+import com.helger.schematron.xslt.SchematronResourceXSLT;
 import com.helger.xml.serialize.read.DOMReader;
 import config.PhiveRulesInitializer;
 
@@ -183,12 +194,19 @@ public class ValidationServiceImpl extends ValidationServiceGrpc.ValidationServi
             boolean overallSuccess = true;
             if (resultList != null) {
                 for (final ValidationResult result : resultList) {
+                    // Fix ZATCA Schematron SVRL parsing issue: the ZATCA XSLT
+                    // produces whitespace text nodes in <svrl:schematron-output>
+                    // which causes JAXB to fail. Re-run and parse without XSD
+                    // validation when the internal error is detected.
+                    final ValidationResult effectiveResult =
+                            fixZATCASchematronResult(result, xmlNode);
+
                     final ValidationProto.ValidationLayerResult.Builder layerBuilder =
                             ValidationProto.ValidationLayerResult.newBuilder();
 
                     // Set validation type and artifact
-                    if (result.getValidationArtefact() != null) {
-                        final var artefact = result.getValidationArtefact();
+                    if (effectiveResult.getValidationArtefact() != null) {
+                        final var artefact = effectiveResult.getValidationArtefact();
                         layerBuilder.setValidationType(artefact.getValidationType().getID());
 
                         if (artefact.getRuleResource() != null) {
@@ -197,15 +215,15 @@ public class ValidationServiceImpl extends ValidationServiceGrpc.ValidationServi
                     }
 
                     // Check success - result is valid if it has no errors
-                    final boolean layerSuccess = !result.getErrorList().containsAtLeastOneError();
+                    final boolean layerSuccess = !effectiveResult.getErrorList().containsAtLeastOneError();
                     layerBuilder.setSuccess(layerSuccess);
                     if (!layerSuccess) {
                         overallSuccess = false;
                     }
 
                     // Process errors and warnings
-                    if (result.getErrorList() != null && result.getErrorList().isNotEmpty()) {
-                        result.getErrorList().forEach(error -> {
+                    if (effectiveResult.getErrorList() != null && effectiveResult.getErrorList().isNotEmpty()) {
+                        effectiveResult.getErrorList().forEach(error -> {
                             final ValidationProto.ValidationError.Builder errorBuilder =
                                     ValidationProto.ValidationError.newBuilder()
                                     .setLevel(error.getErrorLevel().getID())
@@ -253,6 +271,115 @@ public class ValidationServiceImpl extends ValidationServiceGrpc.ValidationServi
 
             responseObserver.onNext(response);
             responseObserver.onCompleted();
+        }
+    }
+
+    /**
+     * Fixes a ZATCA Schematron validation result that failed due to SVRL whitespace
+     * parsing issues. The ZATCA XSLT uses {@code <xsl:output indent="yes"/>} which
+     * produces whitespace text nodes inside {@code <svrl:schematron-output>}. Phive's
+     * JAXB unmarshaller rejects these with strict XSD validation.
+     *
+     * <p>When the ZATCA Schematron layer reports "Internal error interpreting Schematron
+     * result", this method re-runs the XSLT, strips whitespace from the SVRL DOM,
+     * and re-parses with schema validation disabled.</p>
+     *
+     * @return the fixed result, or the original if no fix was needed
+     */
+    @Nonnull
+    private ValidationResult fixZATCASchematronResult(
+            @Nonnull final ValidationResult result,
+            @Nonnull final Node xmlNode) {
+
+        final IValidationArtefact artefact = result.getValidationArtefact();
+        if (artefact == null || artefact.getRuleResource() == null) {
+            return result;
+        }
+        final String path = artefact.getRuleResource().getPath();
+
+        // Only target ZATCA Schematron results that failed with internal error
+        if (!path.contains("ZATCA_E-invoice_Validation_Rules")) {
+            return result;
+        }
+        if (!result.getErrorList().containsAtLeastOneError()) {
+            return result;
+        }
+
+        boolean isInternalError = false;
+        for (final var error : result.getErrorList()) {
+            if (error.getErrorText(Locale.US).contains("Internal error interpreting Schematron result")) {
+                isInternalError = true;
+                break;
+            }
+        }
+        if (!isInternalError) {
+            return result;
+        }
+
+        LOGGER.info("Attempting ZATCA Schematron SVRL fallback re-parse for: {}", path);
+
+        try {
+            // Re-run the XSLT with the same resource
+            final SchematronResourceXSLT schematron = new SchematronResourceXSLT(
+                    artefact.getRuleResource());
+            final Document svrlDoc = schematron.applySchematronValidation(
+                    new javax.xml.transform.dom.DOMSource(xmlNode));
+            if (svrlDoc == null) {
+                LOGGER.warn("ZATCA Schematron XSLT re-run returned null SVRL");
+                return result;
+            }
+
+            // Strip whitespace text nodes that cause JAXB to fail
+            stripWhitespaceTextNodes(svrlDoc.getDocumentElement());
+
+            // Parse SVRL without XSD validation
+            final SVRLMarshaller marshaller = new SVRLMarshaller();
+            marshaller.setUseSchema(false);
+            final SchematronOutputType svrl = marshaller.read(svrlDoc);
+            if (svrl == null) {
+                LOGGER.warn("ZATCA SVRL fallback: SVRLMarshaller.read() returned null");
+                return result;
+            }
+
+            // Build error list from parsed SVRL
+            final ErrorList errorList = new ErrorList();
+            for (final SVRLFailedAssert fa : SVRLHelper.getAllFailedAssertions(svrl)) {
+                errorList.add(fa.getAsResourceError(path));
+            }
+            for (final SVRLSuccessfulReport sr : SVRLHelper.getAllSuccessfulReports(svrl)) {
+                errorList.add(sr.getAsResourceError(path));
+            }
+
+            // Determine validity based on errors
+            final EExtendedValidity validity = errorList.containsAtLeastOneError()
+                    ? EExtendedValidity.INVALID
+                    : EExtendedValidity.VALID;
+
+            LOGGER.info("ZATCA Schematron SVRL fallback succeeded: {} errors, {} total items",
+                    errorList.getErrorCount(),
+                    errorList.size());
+
+            return new ValidationResult(artefact, errorList, validity, 0);
+
+        } catch (final Exception ex) {
+            LOGGER.error("ZATCA Schematron SVRL fallback failed", ex);
+            return result;
+        }
+    }
+
+    /**
+     * Recursively removes whitespace-only text nodes from a DOM element.
+     */
+    private void stripWhitespaceTextNodes(@Nonnull final Element element) {
+        final NodeList children = element.getChildNodes();
+        for (int i = children.getLength() - 1; i >= 0; i--) {
+            final Node child = children.item(i);
+            if (child.getNodeType() == Node.TEXT_NODE
+                    && child.getTextContent().trim().isEmpty()) {
+                element.removeChild(child);
+            } else if (child.getNodeType() == Node.ELEMENT_NODE) {
+                stripWhitespaceTextNodes((Element) child);
+            }
         }
     }
 }
