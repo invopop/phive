@@ -73,6 +73,9 @@ public class PhiveRulesInitializer {
             // OIOUBL (Danish Public Information Online UBL - NemHandel)
             registerRules("com.helger.phive.oioubl.OIOUBLValidation", "initOIOUBL");
 
+            // ZATCA (Saudi Arabia e-invoicing)
+            registerRules("com.helger.phive.zatca.ZATCAValidation", "initZATCA");
+
             // Log the number of registered validation executor sets
             final int count = registry.getAll().size();
 
