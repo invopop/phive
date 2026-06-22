@@ -70,6 +70,9 @@ public class PhiveRulesInitializer {
             // France CTC (Chorus Pro - French e-invoicing)
             registerRules("com.helger.phive.france.FranceCTCValidation", "initFranceCTC");
 
+            // OIOUBL (Danish Public Information Online UBL - NemHandel)
+            registerRules("com.helger.phive.oioubl.OIOUBLValidation", "initOIOUBL");
+
             // ZATCA (Saudi Arabia e-invoicing)
             registerRules("com.helger.phive.zatca.ZATCAValidation", "initZATCA");
 

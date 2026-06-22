@@ -227,6 +227,7 @@ Set environment variables:
 - **ZUGFeRD** - German e-invoicing format
 - **Factur-X** - French pdf+xml e-invoicing
 - **France-CTC** - French e-invoicing
+- **OIOUBL** - Danish e-invoicing (NemHandel)
 
 
 Many rule sets are deprecated so you may need to filter by status on your end.

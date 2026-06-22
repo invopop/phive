@@ -158,6 +158,13 @@
       <version>${phive-rules.version}</version>
     </dependency>
 
+    <!-- OIOUBL (Danish Public Information Online UBL — NemHandel) -->
+    <dependency>
+      <groupId>com.helger.phive.rules</groupId>
+      <artifactId>phive-rules-oioubl</artifactId>
+      <version>${phive-rules.version}</version>
+    </dependency>
+
     <!-- ZATCA (Saudi Arabia e-invoice) -->
     <dependency>
       <groupId>com.helger.phive.rules</groupId>
@@ -180,16 +187,6 @@
     <dependency>
       <groupId>com.helger.phive.rules</groupId>
       <artifactId>phive-rules-finvoice</artifactId>
-      <version>${phive-rules.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.helger.phive.rules</groupId>
-      <artifactId>phive-rules-oioubl</artifactId>
-      <version>${phive-rules.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.helger.phive.rules</groupId>
-      <artifactId>phive-rules-zugferd</artifactId>
       <version>${phive-rules.version}</version>
     </dependency>
     -->
